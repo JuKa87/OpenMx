@@ -18,6 +18,11 @@
 #include "omxFitFunction.h"
 #include "omxBLAS.h"
 #include "omxRAMExpectation.h"
+#include "benchmark.h"
+
+
+
+
 
 typedef struct {
 
@@ -282,8 +287,11 @@ static void omxCalculateRAMCovarianceAndMeans(omxMatrix* A, omxMatrix* S, omxMat
 	// 		Rf_error("INTERNAL ERROR: Incorrectly sized matrices being passed to omxRAMExpectation Calculation.\n Please report this to the OpenMx development team.");
 	// }
 	
+    tic();
 	omxShallowInverse(NULL, numIters, A, Z, Ax, I );
-	
+    expTime += toc();
+    expCount += 1;
+    
 	/* Cov = FZSZ'F' */
 	omxDGEMM(FALSE, FALSE, 1.0, F, Z, 0.0, Y);
 

@@ -20,6 +20,7 @@
 #include "omxData.h"
 #include "omxFIMLFitFunction.h"
 #include "omxSadmvnWrapper.h"
+#include "benchmark.h"
 
 
 void omxFIMLAdvanceJointRow(int *row, int *numIdenticalDefs, 
@@ -73,7 +74,8 @@ void omxFIMLAdvanceJointRow(int *row, int *numIdenticalDefs,
  * Grep for "[[Comment 4]]" in source code.
  */
 bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFitFunction *sharedobj, int rowbegin, int rowcount) {
-	
+    gradCount+=1;
+    tic();
 	omxFIMLFitFunction* ofo = ((omxFIMLFitFunction*) localobj->argStruct);
 	omxFIMLFitFunction* shared_ofo = ((omxFIMLFitFunction*) sharedobj->argStruct);
 	
@@ -603,5 +605,6 @@ bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFi
 			continue;
 			
 	}
+    gradTime += toc();
 	return FALSE;
 }

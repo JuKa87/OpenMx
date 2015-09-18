@@ -40,6 +40,14 @@
 #include "npsolswitch.h"
 #include "omxCsolnp.h"
 
+//i know this is pretty awful but the better stuff fails, and i have no time to get used to cpp again
+extern int expCount=0;
+extern double expTime=0;
+extern int gradCount=0;
+extern double gradTime=0;
+
+
+
 void markAsDataFrame(SEXP list)
 {
 	SEXP classes;
@@ -323,7 +331,6 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 	/* TODO: Need to find a way to account for nullness in these.  For now, all checking is done on the front-end. */
 //	if(!isVector(matList)) Rf_error ("matList must be a list");
 //	if(!isVector(algList)) Rf_error ("algList must be a list");
-
 	omxManageProtectInsanity protectManager;
 
 	FitContext::setRFitFunction(NULL);
@@ -331,6 +338,12 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 
 	/* Create new omxState for current state storage and initialize it. */
 	omxState *globalState = new omxState;
+    
+    expCount= 0;
+    expTime=0;
+    gradCount=0;
+    gradTime=0;
+    
 
 	readOpts(options, &Global->numThreads, &Global->analyticGradients);
 #if HAS_NPSOL
@@ -522,7 +535,8 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 
 	if (Global->debugProtectStack) mxLog("Protect depth at line %d: %d", __LINE__, protectManager.getDepth());
 	delete Global;
-
+    fprintf(stdout,"%i evaluations of Expectation took %f seconds\n",expCount,expTime);
+    fprintf(stdout,"%i evaluations of Gradient took %f seconds\n",gradCount,gradTime);
 	return result.asR();
 }
 
