@@ -147,6 +147,8 @@ static void sliceCrossUpdate(omxMatrix* A, omxMatrix* B, int row, int col, omxMa
 
 static void omxCallRAMExpectation(omxExpectation* oo, const char *, const char *) {
     if(OMX_DEBUG) { mxLog("RAM Expectation calculating."); }
+	tic();
+	expCount += 1;
 	omxRAMExpectation* oro = (omxRAMExpectation*)(oo->argStruct);
 	
 	omxRecompute(oro->A, NULL);
@@ -157,6 +159,7 @@ static void omxCallRAMExpectation(omxExpectation* oo, const char *, const char *
 	    
 	omxCalculateRAMCovarianceAndMeans(oro->A, oro->S, oro->F, oro->M, oro->cov, 
 		oro->means, oro->numIters, oro->I, oro->Z, oro->Y, oro->X, oro->Ax);
+	expTime += toc();	
 }
 
 static void omxDestroyRAMExpectation(omxExpectation* oo) {
@@ -265,7 +268,6 @@ static void omxPopulateRAMAttributes(omxExpectation *oo, SEXP algebra) {
 static void omxCalculateRAMCovarianceAndMeans(omxMatrix* A, omxMatrix* S, omxMatrix* F, 
 	omxMatrix* M, omxMatrix* Cov, omxMatrix* Means, int numIters, omxMatrix* I, 
 	omxMatrix* Z, omxMatrix* Y, omxMatrix* X, omxMatrix* Ax) {
-	
 	if(OMX_DEBUG) { mxLog("Running RAM computation with numIters is %d\n.", numIters); }
 		
 	if(Ax == NULL || I == NULL || Z == NULL || Y == NULL || X == NULL) {
@@ -287,10 +289,7 @@ static void omxCalculateRAMCovarianceAndMeans(omxMatrix* A, omxMatrix* S, omxMat
 	// 		Rf_error("INTERNAL ERROR: Incorrectly sized matrices being passed to omxRAMExpectation Calculation.\n Please report this to the OpenMx development team.");
 	// }
 	
-    tic();
 	omxShallowInverse(NULL, numIters, A, Z, Ax, I );
-    expTime += toc();
-    expCount += 1;
     
 	/* Cov = FZSZ'F' */
 	omxDGEMM(FALSE, FALSE, 1.0, F, Z, 0.0, Y);
@@ -307,6 +306,7 @@ static void omxCalculateRAMCovarianceAndMeans(omxMatrix* A, omxMatrix* S, omxMat
 		omxDGEMV(FALSE, 1.0, Y, M, 0.0, Means);
 		if(OMX_DEBUG_ALGEBRA) {omxPrintMatrix(Means, "....RAM: Model-implied Means Vector:");}
 	}
+    
 }
 
 void omxInitRAMExpectation(omxExpectation* oo) {

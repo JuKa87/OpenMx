@@ -74,8 +74,6 @@ void omxFIMLAdvanceJointRow(int *row, int *numIdenticalDefs,
  * Grep for "[[Comment 4]]" in source code.
  */
 bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFitFunction *sharedobj, int rowbegin, int rowcount) {
-    gradCount+=1;
-    tic();
 	omxFIMLFitFunction* ofo = ((omxFIMLFitFunction*) localobj->argStruct);
 	omxFIMLFitFunction* shared_ofo = ((omxFIMLFitFunction*) sharedobj->argStruct);
 	
@@ -335,6 +333,8 @@ bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFi
 						if(OMX_DEBUG_ROWS(row)) { mxLog("0.5*log(det(Cov)) is: %3.3f", determinant);}
 					}
 					else {
+					    gradCount+=1;
+					    tic();
 						/* Calculate derminant and inverse of Censored continuousCov matrix */
 						omxCopyMatrix(smallMeans, means);
 						omxRemoveElements(smallMeans, numContRemoves, contRemove.data());
