@@ -526,10 +526,10 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 	result.add("status", backwardCompatStatus.asR());
 	result.add("iterations", Rf_ScalarInteger(fc->iterations));
 	result.add("evaluations", evaluations);
-    result.add("expCount",  expCount);
-    result.add("expTime", expTime);
-    result.add("gradCount", expCount);
-    result.add("gradTime", expTime);
+    result.add("expCount",  Rf_ScalarInteger(expCount));
+    result.add("expTime", Rf_ScalarReal(expTime));
+    result.add("gradCount", Rf_ScalarInteger(expCount));
+    result.add("gradTime", Rf_ScalarReal(gradTime));
 
 	// Data are not modified and not copied. The same memory
 	// is shared across all instances of state.
@@ -540,8 +540,6 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 
 	if (Global->debugProtectStack) mxLog("Protect depth at line %d: %d", __LINE__, protectManager.getDepth());
 	delete Global;
-    fprintf(stdout,"%i evaluations of Expectation took %f seconds\n",expCount,expTime);
-    fprintf(stdout,"%i evaluations of Gradient took %f seconds\n",gradCount,gradTime);
 	return result.asR();
 }
 

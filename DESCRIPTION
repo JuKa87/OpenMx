@@ -1,5 +1,4 @@
 Package: OpenMx
-Date: 2015-09-22
 Title: Extended Structural Equation Modelling
 Authors@R: c(person(c("Steven", "M."), "Boker", role="aut"),
     person(c("Michael", "C."), "Neale", role="aut"), person(c("Hermine", "H."),
@@ -146,4 +145,3 @@ Collate:
     'MxFactorScores.R'
     'MxAvailableOptimizers.R'
     'zzz.R'
-Version: 2.2.6-98
