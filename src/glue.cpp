@@ -39,6 +39,7 @@
 #include "dmvnorm.h"
 #include "npsolswitch.h"
 #include "omxCsolnp.h"
+#include "benchmark.h"
 
 //i know this is pretty awful but the better stuff fails, and i have no time to get used to cpp again
 extern int expCount=0;
@@ -525,6 +526,10 @@ SEXP omxBackend2(SEXP constraints, SEXP matList,
 	result.add("status", backwardCompatStatus.asR());
 	result.add("iterations", Rf_ScalarInteger(fc->iterations));
 	result.add("evaluations", evaluations);
+    result.add("expCount",  expCount);
+    result.add("expTime", expTime);
+    result.add("gradCount", expCount);
+    result.add("gradTime", expTime);
 
 	// Data are not modified and not copied. The same memory
 	// is shared across all instances of state.
