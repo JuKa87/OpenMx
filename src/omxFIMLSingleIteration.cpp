@@ -471,6 +471,7 @@ bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFi
 					omxCopyMatrix(ordMeans, means);
 					omxRemoveElements(ordMeans, numOrdRemoves, ordRemove.data()); 	    // Reduce the row to just ordinal.
 					F77_CALL(dgemv)((smallCov->minority), &(halfCov->rows), &(halfCov->cols), &oned, halfCov->data, &(halfCov->leading), contRow->data, &onei, &oned, ordMeans->data, &onei);                      // ordMeans += halfCov %*% contRow
+                    
 				}
 				
 			} // End of continuous likelihood values calculation
@@ -595,6 +596,7 @@ bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFi
 				} 
 				
 			}
+			gradTime += toc();
 			if(firstRow) firstRow = false;
 			omxFIMLAdvanceJointRow(&row, &numIdenticalDefs, 
 			&numIdenticalContinuousMissingness,
@@ -605,6 +607,5 @@ bool omxFIMLSingleIterationJoint(FitContext *fc, omxFitFunction *localobj, omxFi
 			continue;
 			
 	}
-    gradTime += toc();
 	return FALSE;
 }
