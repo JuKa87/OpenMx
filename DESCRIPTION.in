@@ -146,4 +146,4 @@ Collate:
     'MxFactorScores.R'
     'MxAvailableOptimizers.R'
     'zzz.R'
-Version: @VERSION@
+Version: 1.0

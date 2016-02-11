@@ -145,3 +145,4 @@ Collate:
     'MxFactorScores.R'
     'MxAvailableOptimizers.R'
     'zzz.R'
+Version: 1.0
